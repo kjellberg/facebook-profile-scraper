@@ -8,7 +8,7 @@ $ gem install 'facebook-profile-scraper'
 ```
 Or include it in your project's Gemfile with Bundler:
 ```ruby
-gem 'facebook-profile-scraper', '~> 1.0.0'
+gem 'facebook-profile-scraper', '~> 1.0'
 ```
 
 ## Example
