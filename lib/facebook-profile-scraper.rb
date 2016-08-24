@@ -1,49 +1,57 @@
-require 'HTTParty'
-require 'Nokogiri'
+require 'open-uri'
+require 'nokogiri'
 
 class FacebookProfileScraper
-  def initialize(facebook_profile)
+
+  ELEMENT_CONFIG = {
+    name: {
+      selector: '#fb-timeline-cover-name',
+      value: -> (element) { element.text }
+    },
+    picture_url: {
+      selector: 'img.profilePic.img',
+      value: -> (element) { element.attr('src') }
+    },
+    city: {
+      selector: '#pagelet_hometown span._50f5._50f7',
+      value: -> (element) { element.css('a').text }
+    },
+    about: {
+      selector: '#pagelet_bio span._c24._50f4',
+      value: -> (element) { element.text }
+    },
+    quote: {
+      selector: '#pagelet_quotes span._c24._50f4',
+      value: -> (element) { element.text }
+    }
+  }
+
+  def initialize(facebook_profile_url)
     begin
-      # Download page (GET REQEUST)
-      @page = HTTParty.get(facebook_profile)
-      # Parse the page with Nokogiri
-      @parsed_page = Nokogiri::HTML(@page)
-    rescue
+      response = open(facebook_profile_url)
+      @parsed_page = Nokogiri::HTML(response.read)
+    rescue OpenURI::HTTPError
+      puts "Couldn't get profile: #{facebook_profile_url}"
     end
+
+    self
   end
-  def name
-    begin
-      # Parse full name from profile
-      @parsed_page.css('#fb-timeline-cover-name').text
-    rescue
-    end
+
+  # def method_missing(method, *arguments, &block)
+  def method_missing(method)
+    element_config = ELEMENT_CONFIG[method.to_sym]
+
+    # Nokogiri always return an array of elements
+    element = @parsed_page.css(element_config[:selector]).first
+
+    # Return if not found
+    return unless element
+
+    # Get value
+    value = element_config[:value].call(element)
+
+    # Don't allow empty string
+    value.empty? ? nil : value
   end
-  def picture
-    begin
-      # Parse profile picture from profile
-      @parsed_page.css('img.profilePic.img').attr('src')
-    rescue
-    end
-  end
-  def city
-    begin
-      # Parse first city from profile
-      @parsed_page.css('#pagelet_hometown span._50f5._50f7')[0].css('a').text
-    rescue
-    end
-  end
-  def about
-    begin
-      # Parse "about" from profile
-      @parsed_page.css('#pagelet_bio span._c24._50f4')[0].text
-    rescue
-    end
-  end
-  def quote
-    begin
-      # Parse "quote" from profile
-      @parsed_page.css('#pagelet_quotes span._c24._50f4')[0].text
-    rescue
-    end
-  end
+
 end
