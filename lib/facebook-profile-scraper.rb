@@ -5,9 +5,8 @@ class FacebookProfileScraper
   def initialize(facebook_profile)
     # Download page (GET REQEUST)
     @page = HTTParty.get(facebook_profile)
-
     # Parse the page with Nokogiri
-    @parses_page = Nokogiri::HTML(@page)
+    @parsed_page = Nokogiri::HTML(@page)
   end
   def city
     # Parse first city from profile
