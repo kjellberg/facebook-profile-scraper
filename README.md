@@ -1,5 +1,15 @@
 # Facebook Profile Scraper
+A simple class to fetch profile data from Facebook accounts.
 
+## Installation
+Install 'Facebook Profile Scraper' from RubyGems:
+```
+$ gem install 'facebook-profile-scraper'
+```
+Or include it in your project's Gemfile with Bundler:
+```ruby
+gem 'facebook-profile-scraper', '~> 1.0.0'
+```
 
 ## Example
 ```ruby
