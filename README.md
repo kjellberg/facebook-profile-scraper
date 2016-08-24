@@ -2,5 +2,7 @@
 
 
 ## Example
-  profile = FacebookProfileScraper.new('https://www.facebook.com/zuck')
-  profile.city # --> Palo Alto
+```ruby
+profile = FacebookProfileScraper.new('https://www.facebook.com/zuck') # Download profile
+profile.city # --> Palo Alto
+```
