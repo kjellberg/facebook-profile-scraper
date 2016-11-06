@@ -54,4 +54,79 @@ class FacebookProfileScraper
     value.empty? ? nil : value
   end
 
+  def work_experience
+    work_experience = []
+    begin
+      @parsed_page.css('div[data-pnref=work] .fbEditProfileViewExperience').each do |div| 
+        work = {}
+        work[:name] = ''
+        work[:meta_data] = ''
+        work[:name] = div.css('a').text
+        div.css('div.fsm').each do |work_meta_data_object| 
+          work_meta_data = work_meta_data_object.text
+          if work_meta_data.include?(' · ')
+            work[:meta_data] = work_meta_data.split(' · ')
+          else
+            work[:meta_data] = [work_meta_data]
+          end
+        end
+        work_experience << work
+      end
+    rescue
+    end
+    work_experience
+  end
+
+  def education
+    education = []
+    begin
+      @parsed_page.css('div[data-pnref=edu] .fbEditProfileViewExperience').each do |div| 
+        school = {}
+        school[:name] = ''
+        school[:meta_data] = ''
+        school[:name] = div.css('a').text
+        div.css('div.fsm').each do |school_meta_data_object| 
+          school_meta_data = school_meta_data_object.text
+          if school_meta_data.include?(' · ')
+            school[:meta_data] = school_meta_data.split(' · ')
+          else
+            school[:meta_data] = [school_meta_data]
+          end
+        end
+        education << school
+      end
+    rescue
+    end
+    education
+  end
+
+  # def favorites
+  # end
+
+  # def favorite_athlete
+  # end
+
+  # def favorite_sports_teams
+  # end
+
+  # def favorite_movies
+  # end
+
+  # def favorite_games
+  # end
+
+  # def favorite_television
+  # end
+
+  # def favorite_interests
+  # end
+
+  # def favorite_music
+  # end
+
+  # def favorite_activities
+  # end
+
+  # def favorite_books
+  # end
 end
