@@ -86,7 +86,6 @@ class FacebookProfileScraper
         school[:meta_data] = ''
         school[:name] = div.css('a').text
         div.css('div.fsm').each do |school_meta_data_object| 
-          byebug
           school_meta_data = school_meta_data_object.text
           if school_meta_data.include?(' · ')
             school[:meta_data] = school_meta_data.split(' · ')
